@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0C1412">
+<title>GOAL COUNTER</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="welcome" class="welcome" role="dialog" aria-modal="true" aria-label="Welcome" hidden>
+  <svg class="mark" viewBox="0 0 120 120" aria-hidden="true">
+    <path class="mark-ring" pathLength="1" d="M88.28 31.72A40 40 0 1 0 100 60"/>
+    <path class="mark-bar" pathLength="1" d="M100 60H64"/>
+    <circle class="mark-dot" cx="88.28" cy="31.72" r="7"/>
+  </svg>
+  <p class="w-brand" aria-hidden="true">Goal Counter</p>
+  <p class="w-text">Welcome,<br><strong data-name></strong></p>
+  <button id="skip" class="btn" type="button">Skip</button>
+</div>
+
+<div id="app" class="app">
+  <nav class="nav" aria-label="Main">
+    <span class="brand"><svg class="logo" viewBox="0 0 120 120" aria-hidden="true"><path class="logo-ring" d="M88.28 31.72A40 40 0 1 0 100 60"/><path class="logo-bar" d="M100 60H64"/><circle class="logo-dot" cx="88.28" cy="31.72" r="7"/></svg>Goal Counter</span>
+    <div class="nav-links">
+    <a href="#dashboard" data-nav="dashboard">Home</a>
+    <a href="#roadmap" data-nav="roadmap">Roadmap</a>
+    <a href="#tasks" data-nav="tasks">Tasks</a>
+    <a href="#money" data-nav="money">Money</a>
+    <a href="#explore" data-nav="explore">Explore</a>
+    <a href="#reminders" data-nav="reminders">Alerts</a>
+    <a href="#settings" data-nav="settings">Settings</a>
+    </div>
+    <span class="nav-pad" aria-hidden="true"></span>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    <p id="notice" class="notice" role="status" hidden></p>
+    <p id="remBanner" class="notice" role="status" hidden></p>
+
+    <section data-view="dashboard" aria-labelledby="h-dash">
+      <div class="home-head">
+        <span id="homeAvatar" class="avatar" aria-hidden="true"></span>
+        <h1 id="h-dash" class="home-greet"><span id="greet"></span></h1>
+      </div>
+      <div class="grid">
+        <article class="card hero span">
+          <p class="eyebrow"><i class="sun"></i>UAE GOAL</p>
+          <p class="big"><span id="pct">&ndash;</span><span id="pctSign" hidden>%</span> <small id="pctWord">not available</small></p>
+          <p class="pts" id="pts"></p>
+          <div class="bar" role="progressbar" aria-label="UAE career and relocation progress" aria-valuemin="0" aria-valuemax="100"><i id="fill"></i></div>
+          <p class="mu" id="pnote"></p>
+          <dl class="kv">
+            <div><dt>Journey stage</dt><dd>Setup</dd></div>
+            <div><dt>Readiness to move</dt><dd>Not assessed</dd></div>
+          </dl>
+          <p class="mu small">Goal progress measures how much of your roadmap you have completed. It is not readiness to move. A high percentage does not mean you qualify for a visa or have enough money to relocate; readiness will check funds, route and documents separately.</p>
+        </article>
+
+        <article class="card">
+          <h2>Review and replan</h2>
+          <div id="replan"></div>
+        </article>
+
+        <article class="card">
+          <h2>Reminders</h2>
+          <div id="remHome"></div>
+        </article>
+
+        <article class="card span">
+          <h2>Category progress <span class="tag" id="roadTag">Proposed, not approved</span></h2>
+          <ul class="cats" id="catprog"></ul>
+          <p class="mu small" id="catnote"></p>
+          <a class="link" href="#roadmap">Open Roadmap</a>
+        </article>
+
+        <article class="card">
+          <h2>Completed milestones</h2>
+          <ul class="plain" id="doneMs"></ul>
+        </article>
+
+        <article class="card">
+          <h2>Upcoming milestones</h2>
+          <ul class="plain" id="upMs"></ul>
+          <p class="mu small" id="upMore"></p>
+        </article>
+
+        <article class="card">
+          <h2>Recently completed tasks</h2>
+          <ul class="plain" id="recentTasks"></ul>
+        </article>
+
+        <article class="card">
+          <h2>Record milestone progress</h2>
+          <div id="record"></div>
+          <p id="recMsg" class="small" role="status"></p>
+        </article>
+
+        <article class="card">
+          <h2>Financial readiness <span class="tag" id="finTag">Placeholder</span></h2>
+          <dl class="kv">
+            <div><dt>Outstanding debt</dt><dd id="finDebt">Not entered</dd></div>
+            <div><dt>Rent status</dt><dd id="finRent">Not entered</dd></div>
+            <div><dt>Relocation fund</dt><dd id="finFund">Not established</dd></div>
+          </dl>
+          <p class="mu small">Outstanding debt here is the reported balance you entered for active accounts. It is not an estimate after payments. The relocation line stays “Not established” until you set that fund in Money. Open Money for payment history, bills, cash flow, and the financial checklist. None of this is your goal percentage.</p>
+          <a class="link" href="#money">Open Money</a>
+        </article>
+
+        <article class="card">
+          <h2>Upcoming deadlines</h2>
+          <p>None recorded.</p>
+        </article>
+      </div>
+    </section>
+
+    <section data-view="roadmap" hidden aria-labelledby="h-road">
+      <h1 id="h-road">Roadmap</h1>
+      <p id="rm_intro" class="mu">Add a category when you want it. Pick it from the list, fill what you need, and save. It joins the roadmap only after that save. Approve a valid 100-point roadmap when the allocation is ready. Goal progress stays off until then.</p>
+      <div id="roadmap-root" class="rm"></div>
+      <div id="routes-root" class="rm"></div>
+    </section>
+
+    <section data-view="tasks" hidden aria-labelledby="h-tasks">
+      <h1 id="h-tasks">Tasks</h1>
+      <p class="mu">Create and track tasks. Tasks linked to a milestone show it; supporting tasks do not earn goal points on their own. A task can wait on other tasks or milestones.</p>
+      <div id="tasks-root" class="rm"></div>
+    </section>
+
+    <section data-view="money" hidden aria-labelledby="h-money">
+      <h1 id="h-money">Money</h1>
+      <div id="money-root" class="mon"></div>
+    </section>
+
+    <section data-view="reminders" hidden aria-labelledby="h-rem">
+      <h1 id="h-rem">Reminders</h1>
+      <p class="mu">Reminders live in this app. Turning off browser notifications, later, does not turn this list off. A reminder does not complete a task, pay a bill, or change the goal percentage.</p>
+      <div id="reminders-root" class="rm"></div>
+    </section>
+
+    <section data-view="explore" hidden aria-labelledby="h-exp">
+      <h1 id="h-exp">Explore the UAE</h1>
+      <div class="ex-modes" role="group" aria-label="Explore the UAE sections">
+        <button type="button" class="ex-mode" id="ex_tab_disc" aria-pressed="true">Discoveries</button>
+        <button type="button" class="ex-mode" id="ex_tab_facts" aria-pressed="false">Facts</button>
+        <button type="button" class="ex-mode" id="ex_tab_events" aria-pressed="false">Events</button>
+      </div>
+      <div id="explore-root" class="ex"></div>
+      <div id="facts-root" class="ex" hidden></div>
+      <div id="events-root" class="ex" hidden></div>
+    </section>
+
+    <section data-view="settings" hidden aria-labelledby="h-set">
+      <h1 id="h-set">Settings</h1>
+      <div class="profile-header">
+        <span id="setAvatar" class="avatar" aria-hidden="true"></span>
+        <div class="profile-id">
+          <p class="profile-name" id="setName"></p>
+          <p class="profile-sub">Personal profile</p>
+        </div>
+      </div>
+      <article class="card" id="profileInfo" aria-labelledby="h-pinfo">
+        <h2 id="h-pinfo">Profile information</h2>
+        <dl class="profile-rows">
+          <div class="profile-row"><dt>Display name</dt><dd id="pfName"></dd></div>
+          <div class="profile-row"><dt>Profile photo</dt><dd id="pfPhoto"></dd></div>
+        </dl>
+        <p class="mu small">Your name and photo are kept only in this browser. Nothing is uploaded.</p>
+      </article>
+      <div class="profile-actions" id="profileActions">
+        <button id="editProfile" class="btn" type="button" aria-expanded="false" aria-controls="nameForm">Edit profile</button>
+      </div>
+      <p id="profileMsg" class="small mu msg" role="status"></p>
+      <form id="nameForm" class="card" aria-labelledby="h-pedit" novalidate hidden>
+        <h2 id="h-pedit">Edit profile</h2>
+        <div class="pe-photo">
+          <span id="editAvatar" class="avatar md" aria-hidden="true"></span>
+          <div class="pe-photo-ctl">
+            <button id="avatarAdd" class="link" type="button">Add profile photo</button>
+            <button id="avatarChange" class="link" type="button" hidden>Change photo</button>
+            <button id="avatarRemove" class="link" type="button" hidden>Remove photo</button>
+          </div>
+        </div>
+        <input id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp" tabindex="-1" aria-hidden="true" hidden>
+        <p id="avatarMsg" class="small mu msg" role="status"></p>
+        <div>
+          <label for="nameIn">Display name</label>
+          <input id="nameIn" name="name" maxlength="40" autocomplete="off" aria-describedby="nameMsg">
+          <p id="nameMsg" class="small mu msg" role="status"></p>
+        </div>
+        <p id="editMsg" class="small mu msg" role="status"></p>
+        <div class="pe-actions">
+          <button id="profileSave" class="btn" type="submit" hidden>Save</button>
+          <button id="profileCancel" class="link" type="button">Cancel</button>
+        </div>
+      </form>
+      <article class="card">
+        <h2>Welcome screen</h2>
+        <button id="replay" class="btn" type="button">Replay welcome</button>
+      </article>
+      <article class="card" id="data-root"></article>
+      <article class="card" id="pwa">
+        <h2>Install and offline</h2>
+      </article>
+    </section>
+  </main>
+</div>
+
+<script src="js/progress.js"></script>
+<script src="js/roadmap.js"></script>
+<script src="js/scoring.js"></script>
+<script src="js/deps.js"></script>
+<script src="js/store.js"></script>
+<script src="js/backup.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/tasks.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/milestone-tasks.js"></script>
+<script src="js/adjust.js"></script>
+<script src="js/money.js"></script>
+<script src="js/obligations.js"></script>
+<script src="js/cashflow.js"></script>
+<script src="js/funds.js"></script>
+<script src="js/priority.js"></script>
+<script src="js/next.js"></script>
+<script src="js/guidance.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/replan.js"></script>
+<script src="js/reminders.js"></script>
+<script src="js/notify.js"></script>
+<script src="js/tidy.js"></script>
+<script src="js/roadmap-ui.js"></script>
+<script src="js/tasks-ui.js"></script>
+<script src="js/dashboard-ui.js"></script>
+<script src="js/explore.js"></script>
+<script src="js/photos.js"></script>
+<script src="js/facts.js"></script>
+<script src="js/events.js"></script>
+<script src="js/explore-ui.js"></script>
+<script src="js/facts-ui.js"></script>
+<script src="js/events-ui.js"></script>
+<script src="js/money-ui.js"></script>
+<script src="js/obligations-ui.js"></script>
+<script src="js/cashflow-ui.js"></script>
+<script src="js/funds-ui.js"></script>
+<script src="js/routes-ui.js"></script>
+<script src="js/replan-ui.js"></script>
+<script src="js/reminders-ui.js"></script>
+<script src="js/welcome.js"></script>
+<script src="js/pwa.js"></script>
+<script src="js/backup-ui.js"></script>
+<script src="js/profile-ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
